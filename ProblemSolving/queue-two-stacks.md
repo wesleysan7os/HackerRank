@@ -4,49 +4,48 @@ function processData(input) {
   //Enter your code here
   const lines = input.split("\n");
   const queriesNumber = +lines[0];
-  let primaryStack = [];
-  let auxiliarStack = [];
+  let pushStack = [];
+  let popStack = [];
   
   this.enqueue = function(elem) {
-    primaryStack.push(elem);
+    pushStack.push(elem);
   }
   
   this.dequeue = function() {
-    while (primaryStack.length > 0) {
-      auxiliarStack.push(primaryStack.pop());
+    if (popStack.length > 0) {
+      return popStack.pop();
+    }
+
+    while (pushStack.length > 0) {
+      popStack.push(pushStack.pop());
     }
     
-    const deletedElem = auxiliarStack.pop();
-    
-    while (auxiliarStack.length > 0) {
-      primaryStack.push(auxiliarStack.pop());
-    }
-    
-    return deletedElem;
+    return popStack.pop();
   }
   
   this.print = function() {
-    while (primaryStack.length > 0) {
-      auxiliarStack.push(primaryStack.pop());
+    if (popStack.length > 0) {
+      const firstElem = popStack.pop();
+      console.log(firstElem);
+      popStack.push(firstElem);
+      return;
+    }
+
+    while (pushStack.length > 0) {
+      popStack.push(pushStack.pop());
     }
     
-    const firstElem = auxiliarStack.pop();
-    
+    const firstElem = popStack.pop();
     console.log(firstElem);
-    
-    auxiliarStack.push(firstElem);
-    
-    while (auxiliarStack.length > 0) {
-      primaryStack.push(auxiliarStack.pop());
-    }
+    popStack.push(firstElem);
   }
   
   for (let i = 1; i <= queriesNumber; i++) {
-    let args = lines[i].split(" ");
+    let [cmd, arg] = lines[i].split(" ");
     
-    switch(+args[0]) {
+    switch(+cmd) {
       case 1:
-        this.enqueue(+args[1]);
+        this.enqueue(+arg);
         break;
       case 2:
         this.dequeue();
