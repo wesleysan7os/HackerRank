@@ -37,14 +37,13 @@ function timeConversion(s) {
   let format = sec.slice(-2);
   sec = sec.slice(0, 2);
   
-  if (format[0] === 'A') {
-    if (hour === '12') {
-      return `00:${min}:${sec}`;
-    }
-    return `${hour}:${min}:${sec}`
+  if (hour === '12') {
+    hour = '00';
   }
-  //format[0] === 'P'
-  return hour === '12' ? `12:${min}:${sec}` : `${parseInt(hour)+12}:${min}:${sec}`
+  if (format === 'PM') {
+    hour = parseInt(hour, 10) + 12;
+  }
+  return `${hour}:${min}:${sec}`
 }
 
 function main() {
